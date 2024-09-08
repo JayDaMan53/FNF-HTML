@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-
 <html>
-    <style></style>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            color: white;
+        }
+
+        .Arrow {
+            width: 25%;       /* Set a fixed width for consistency */
+            height: 25%;      /* Set a fixed height for consistency */
+            position: absolute;
+            object-fit: contain; /* Ensures images maintain aspect ratio */
+        }
+
+        /* Positioning the arrows */
+        .LEFT {
+            left: 45%;
+        }
+
+        .DOWN {
+            left: 55%;
+        }
+
+        .UP {
+            left: 65%;
+        }
+
+        .RIGHT {
+            left: 75%;
+        }
+    </style>
     <head></head>
     <body>
-        wow so cool
+        <img src="Assets/Arrows/staticLeft0.png" class="Arrow LEFT" id="LEFT">
+        <img src="Assets/Arrows/staticDown0.png" class="Arrow DOWN" id="DOWN">
+        <img src="Assets/Arrows/staticUp0.png" class="Arrow UP" id="UP">
+        <img src="Assets/Arrows/staticRight0.png" class="Arrow RIGHT" id="RIGHT">
+        <Arrows id="Arrows"></Arrows>
+        <h1 id="Misses">Misses: 0</h1>
+        <h1 id="Hits">Hits: 0</h1>
+        <input type="range" min="0.0" max="2.0" value="1.75" id="speed" step=".05">
     </body>
     <script src="Content.js"></script>
 </html>

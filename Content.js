@@ -18,6 +18,11 @@ let ArrowObjects = {
     "RIGHT": []
 }
 
+const urls = {
+    "kiosk": "https://raw.githubusercontent.com/JayDaMan53/FNF-HTML/main/Charts/Kiosk/kiosk.json?",
+    // Add more key-value pairs of URLs here as needed
+};
+
 let Anim = {"LEFT": false, "UP": false, "DOWN": false, "RIGHT": false}
 
 document.onkeydown = function (e) {
@@ -71,6 +76,7 @@ let Index = 1
 function SpawnArrow(type) {
     type = Object.keys(ArrowObjects)[type]
     const newArrow = document.createElement("img")
+    console.log(type)
     newArrow.src = "Assets/Notes/note" + capitalizeFirstLetter(type.toLowerCase()) + "0.png"
     newArrow.classList.add(type, "Arrow")
     newArrow.style.top = `${100}%`;
@@ -154,8 +160,48 @@ setInterval(() => {
 
 // Chart Data
 
+const Charts = {};
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-function LoadChart(Chart) {
+const fetchJsonData = async () => {
+    for (const [key, url] of Object.entries(urls)) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Network response was not ok for ${key}: ` + response.statusText);
+        }
+        const data = await response.json();
+        Charts[key] = data;  // Store JSON in dictionary with the key
+      } catch (error) {
+        console.error(`There has been a problem with fetching the ${key} URL:`, error);
+      }
+    }
+};
+fetchJsonData();
 
+console.log(Charts);  // The dict with all the JSON data
+
+async function LoadChart(Chart) {
+    Chart = Charts[Chart]["song"]
+    let x = 0
+    for (const section of Chart["notes"]) {
+        let y = 0
+        for (let note of section["sectionNotes"]) {
+            console.log(y);  // Process the note here
+            SpawnArrow(note[1])
+            // Example: wait for 500 milliseconds before moving to the next note
+            let deleyLenth = 0
+            if (y != 0) {
+                if (section["sectionNotes"].length - 1 == y) {
+                    deleyLenth = Chart["notes"][x+1]["sectionNotes"][0][0] - note[0]
+                } else {
+                    deleyLenth = section["sectionNotes"][y+1][0] - note[0]
+                }
+            }
+            await delay(deleyLenth);
+            y+=1
+        }
+        x += 1
+    }
 }
